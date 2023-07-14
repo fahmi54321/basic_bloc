@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:basic_bloc/cubits/counter/counter_cubit.dart';
+import 'package:basic_bloc/other_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,7 +16,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CounterCubit>(
-      // todo 1
       create: (context) => CounterCubit(),
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -33,36 +33,60 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          '${BlocProvider.of<CounterCubit>(context, listen: true).state.counter}', // todo 2
-          style: const TextStyle(
-            fontSize: 52.0,
+    return BlocConsumer<CounterCubit, CounterState>(
+      // todo 1
+      listener: (context, state) {
+        if (state.counter == 3) {
+          // todo 2
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  content: Text('counter is ${state.counter}'),
+                );
+              });
+        } else if (state.counter == -1) {
+          // todo 3 (finish)
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const OtherPage(),
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          body: Center(
+            child: Text(
+              '${state.counter}',
+              style: const TextStyle(
+                fontSize: 52.0,
+              ),
+            ),
           ),
-        ),
-      ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () {
-              BlocProvider.of<CounterCubit>(context).increment(); // todo 3
-            },
-            heroTag: 'increment',
-            child: const Icon(Icons.add),
+          floatingActionButton: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FloatingActionButton(
+                onPressed: () {
+                  BlocProvider.of<CounterCubit>(context).increment();
+                },
+                heroTag: 'increment',
+                child: const Icon(Icons.add),
+              ),
+              const SizedBox(width: 10.0),
+              FloatingActionButton(
+                onPressed: () {
+                  BlocProvider.of<CounterCubit>(context).decrement();
+                },
+                heroTag: 'decrement',
+                child: const Icon(Icons.remove),
+              ),
+            ],
           ),
-          const SizedBox(width: 10.0),
-          FloatingActionButton(
-            onPressed: () {
-              BlocProvider.of<CounterCubit>(context)
-                  .decrement(); // todo 4 (finish)
-            },
-            heroTag: 'decrement',
-            child: const Icon(Icons.remove),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
