@@ -34,19 +34,18 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CounterCubit, CounterState>(
-      // todo 1
       listener: (context, state) {
         if (state.counter == 3) {
-          // todo 2
           showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  content: Text('counter is ${state.counter}'),
+                  content: Text(
+                    'counter is ${context.watch<CounterCubit>().state.counter}', //todo 1
+                  ),
                 );
               });
         } else if (state.counter == -1) {
-          // todo 3 (finish)
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -59,7 +58,7 @@ class MyHomePage extends StatelessWidget {
         return Scaffold(
           body: Center(
             child: Text(
-              '${state.counter}',
+              '${context.watch<CounterCubit>().state.counter}', // todo 2
               style: const TextStyle(
                 fontSize: 52.0,
               ),
@@ -70,7 +69,7 @@ class MyHomePage extends StatelessWidget {
             children: [
               FloatingActionButton(
                 onPressed: () {
-                  BlocProvider.of<CounterCubit>(context).increment();
+                  context.read<CounterCubit>().increment(); // todo 3
                 },
                 heroTag: 'increment',
                 child: const Icon(Icons.add),
@@ -78,7 +77,7 @@ class MyHomePage extends StatelessWidget {
               const SizedBox(width: 10.0),
               FloatingActionButton(
                 onPressed: () {
-                  BlocProvider.of<CounterCubit>(context).decrement();
+                  context.read<CounterCubit>().decrement(); // todo 4
                 },
                 heroTag: 'decrement',
                 child: const Icon(Icons.remove),
