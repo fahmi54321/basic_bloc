@@ -1,6 +1,6 @@
-part of 'counter_cubit.dart';
+part of 'counter_bloc.dart';
 
-//todo 1 (next counter_cubit)
+//todo 1 (next counter_event.dart)
 class CounterState extends Equatable {
   final int counter;
   const CounterState({
@@ -8,7 +8,7 @@ class CounterState extends Equatable {
   });
 
   factory CounterState.initial() {
-    return const CounterState(counter: 0);
+    return CounterState(counter: 0);
   }
 
   CounterState copyWith({
