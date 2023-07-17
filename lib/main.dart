@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:basic_bloc/theme/theme_bloc.dart';
+import 'package:basic_bloc/theme/theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,19 +14,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ThemeBloc>(
-      create: (context) => ThemeBloc(),
-      child: Builder(builder: (context) {
-        // todo 1
-        return MaterialApp(
-          title: 'Flutter Demo',
-          theme: context.watch<ThemeBloc>().state.appTheme ==
-                  AppTheme.light // todo 2 (finish)
-              ? ThemeData.light()
-              : ThemeData.dark(),
-          home: const MyHomePage(),
-        );
-      }),
+    return BlocProvider<ThemeCubit>(
+      // todo 3
+      create: (context) => ThemeCubit(),
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+        builder: (context, state) {
+          return MaterialApp(
+            title: 'Flutter Demo',
+            theme: state.appTheme == AppTheme.light
+                ? ThemeData.light()
+                : ThemeData.dark(),
+            home: const MyHomePage(),
+          );
+        },
+      ),
     );
   }
 }
@@ -41,11 +42,7 @@ class MyHomePage extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             final int randInt = Random().nextInt(10);
-            context.read<ThemeBloc>().add(
-                  ChangeThemeEvent(
-                    randInt: randInt,
-                  ),
-                );
+            context.read<ThemeCubit>().changeTheme(randInt); // todo 4 (finish)
           },
           child: const Text(
             'Change Theme',
