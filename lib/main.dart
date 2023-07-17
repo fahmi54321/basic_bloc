@@ -1,6 +1,7 @@
 import 'dart:math';
 
-import 'package:basic_bloc/theme/theme_cubit.dart';
+import 'package:basic_bloc/cubits/color/color_cubit.dart';
+import 'package:basic_bloc/cubits/counter/counter_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,19 +15,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ThemeCubit>(
-      // todo 3
-      create: (context) => ThemeCubit(),
-      child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, state) {
-          return MaterialApp(
-            title: 'Flutter Demo',
-            theme: state.appTheme == AppTheme.light
-                ? ThemeData.light()
-                : ThemeData.dark(),
-            home: const MyHomePage(),
-          );
-        },
+    //todo 8
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ColorCubit>(
+          create: (context) => ColorCubit(),
+        ),
+        BlocProvider<CounterCubit>(
+          create: (context) => CounterCubit(
+            colorCubit: context.read<ColorCubit>(),
+          ),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(),
+        home: const MyHomePage(),
       ),
     );
   }
@@ -38,16 +42,45 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.watch<ColorCubit>().state.color, // todo 9
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            final int randInt = Random().nextInt(10);
-            context.read<ThemeCubit>().changeTheme(randInt); // todo 4 (finish)
-          },
-          child: const Text(
-            'Change Theme',
-            style: TextStyle(fontSize: 24.0),
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                context.read<ColorCubit>().changeColor(); // todo 10
+              },
+              child: const Text(
+                'Change Color',
+                style: TextStyle(
+                  fontSize: 24.0,
+                ),
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            Text(
+              '${context.watch<CounterCubit>().state.counter}', // todo 11
+              style: const TextStyle(
+                fontSize: 52.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () {
+                context
+                    .read<CounterCubit>()
+                    .changeCounter(); // todo 12 (finish)
+              },
+              child: const Text(
+                'Increment Counter',
+                style: TextStyle(
+                  fontSize: 24.0,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
