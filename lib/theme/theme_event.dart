@@ -8,9 +8,8 @@ abstract class ThemeEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// todo 2
 class ChangeThemeEvent extends ThemeEvent {
-  final int randInt; // todo 3 (next theme.bloc.dart)
+  final int randInt;
   const ChangeThemeEvent({
     required this.randInt,
   });

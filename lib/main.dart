@@ -15,20 +15,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ThemeBloc>(
-      // todo 5
       create: (context) => ThemeBloc(),
-      child: BlocBuilder<ThemeBloc, ThemeState>(
-        // todo 6
-        builder: (context, state) {
-          return MaterialApp(
-            title: 'Flutter Demo',
-            theme: state.appTheme == AppTheme.light // todo 7
-                ? ThemeData.light()
-                : ThemeData.dark(),
-            home: const MyHomePage(),
-          );
-        },
-      ),
+      child: Builder(builder: (context) {
+        // todo 1
+        return MaterialApp(
+          title: 'Flutter Demo',
+          theme: context.watch<ThemeBloc>().state.appTheme ==
+                  AppTheme.light // todo 2 (finish)
+              ? ThemeData.light()
+              : ThemeData.dark(),
+          home: const MyHomePage(),
+        );
+      }),
     );
   }
 }
@@ -44,7 +42,6 @@ class MyHomePage extends StatelessWidget {
           onPressed: () {
             final int randInt = Random().nextInt(10);
             context.read<ThemeBloc>().add(
-                  // todo 8 (finish)
                   ChangeThemeEvent(
                     randInt: randInt,
                   ),

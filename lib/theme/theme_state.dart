@@ -2,8 +2,6 @@
 
 part of 'theme_bloc.dart';
 
-// todo 1 (next theme_event.dart)
-
 enum AppTheme { light, dark }
 
 class ThemeState extends Equatable {

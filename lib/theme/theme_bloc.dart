@@ -14,7 +14,6 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
     on<ChangeThemeEvent>(_changeThemeEvent);
   }
 
-  // todo 4 (next main.dart)
   void _changeThemeEvent(ChangeThemeEvent event, Emitter<ThemeState> emit) {
     if (event.randInt % 2 == 0) {
       emit(state.copyWith(appTheme: AppTheme.light));
