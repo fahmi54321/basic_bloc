@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'counter_bloc.dart';
 
 abstract class CounterEvent extends Equatable {
@@ -7,6 +8,13 @@ abstract class CounterEvent extends Equatable {
   List<Object> get props => [];
 }
 
-//todo 5 (next counter_bloc.dart)
+class ChangeCounterEvent extends CounterEvent {
+  //todo 2 (next main.dart)
+  final int incrementSize;
+  const ChangeCounterEvent({
+    required this.incrementSize,
+  });
 
-class ChangeCounterEvent extends CounterEvent {}
+  @override
+  List<Object> get props => [incrementSize];
+}
