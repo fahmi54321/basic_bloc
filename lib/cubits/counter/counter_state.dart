@@ -1,6 +1,6 @@
-part of 'counter_cubit.dart';
+part of 'counter_bloc.dart';
 
-// todo 3 (next counter_cubit.dart)
+//todo 4 (next counter_event.dart)
 
 class CounterState extends Equatable {
   final int counter;

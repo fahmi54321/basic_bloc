@@ -1,7 +1,5 @@
-import 'dart:math';
-
-import 'package:basic_bloc/cubits/color/color_cubit.dart';
-import 'package:basic_bloc/cubits/counter/counter_cubit.dart';
+import 'package:basic_bloc/cubits/color/color_bloc.dart';
+import 'package:basic_bloc/cubits/counter/counter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,13 +13,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    //todo 10
     return MultiBlocProvider(
       providers: [
-        BlocProvider<ColorCubit>(
-          create: (context) => ColorCubit(),
+        BlocProvider<ColorBloc>(
+          create: (context) => ColorBloc(),
         ),
-        BlocProvider<CounterCubit>(
-          create: (context) => CounterCubit(),
+        BlocProvider<CounterBloc>(
+          create: (context) => CounterBloc(
+            colorBloc: context.read<ColorBloc>(),
+          ),
         ),
       ],
       child: MaterialApp(
@@ -41,66 +42,50 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int incrementSize = 1; //todo 2
-
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ColorCubit, ColorState>(
-      //todo 3
-      listener: (context, state) {
-        if (state.color == Colors.red) {
-          incrementSize = 1;
-        } else if (state.color == Colors.green) {
-          incrementSize = 10;
-        } else if (state.color == Colors.blue) {
-          incrementSize = 100;
-        } else if (state.color == Colors.black) {
-          context.read<CounterCubit>().changeCounter(-100);
-          incrementSize = -100;
-        }
-      },
-      child: Scaffold(
-        backgroundColor: context.watch<ColorCubit>().state.color,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  context.read<ColorCubit>().changeColor();
-                },
-                child: const Text(
-                  'Change Color',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                  ),
+    return Scaffold(
+      backgroundColor: context.watch<ColorBloc>().state.color, //todo 11
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                //todo 12
+                context.read<ColorBloc>().add(ChangeColorEvent());
+              },
+              child: const Text(
+                'Change Color',
+                style: TextStyle(
+                  fontSize: 24.0,
                 ),
               ),
-              const SizedBox(height: 20.0),
-              Text(
-                '${context.watch<CounterCubit>().state.counter}',
-                style: const TextStyle(
-                  fontSize: 52.0,
-                  fontWeight: FontWeight.bold,
+            ),
+            const SizedBox(height: 20.0),
+            Text(
+              '${context.watch<CounterBloc>().state.counter}', //todo 13
+              style: const TextStyle(
+                fontSize: 52.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () {
+                //todo 14 (finish)
+                context.read<CounterBloc>().add(
+                      ChangeCounterEvent(),
+                    );
+              },
+              child: const Text(
+                'Increment Counter',
+                style: TextStyle(
+                  fontSize: 24.0,
                 ),
               ),
-              const SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  //todo 4 (finish)
-                  context.read<CounterCubit>().changeCounter(
-                        incrementSize,
-                      );
-                },
-                child: const Text(
-                  'Increment Counter',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

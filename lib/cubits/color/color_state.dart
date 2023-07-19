@@ -1,8 +1,6 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+part of 'color_bloc.dart';
 
-part of 'color_cubit.dart';
-
-// todo 1 (next color_cubit.dart)
+//todo 1 (next counter_event.dart)
 class ColorState extends Equatable {
   final Color color;
   const ColorState({
